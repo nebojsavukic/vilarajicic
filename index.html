@@ -422,7 +422,8 @@
       <form class="contact-form" id="contactForm" action="https://formsubmit.co/nvukic1993@gmail.com" method="POST" novalidate>
         <input type="hidden" name="_captcha" value="false">
         <input type="hidden" name="_subject" value="Novi upit sa sajta — Villa Rajčić">
-        <input type="hidden" name="_template" value="table">
+        <!-- _honey: skriveno polje protiv spama (ljudi ga ne vide, botovi ga popune) -->
+        <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
         <div class="field">
           <label for="name">Ime i prezime</label>
           <input type="text" id="name" name="name" placeholder="Vaše ime" required>
@@ -549,15 +550,18 @@
     });
   });
 
-  // Kontakt forma — šalje preko FormSubmit.co (bez otvaranja email klijenta)
+  // Kontakt forma — šalje preko FormSubmit.co (AJAX: korisnik ostaje na stranici)
+  // Ako menjate email primaoca, promenite ga i ovde i u action atributu forme.
+  const FORM_ENDPOINT='https://formsubmit.co/ajax/nvukic1993@gmail.com';
   const form=document.getElementById('contactForm');
   const status=document.getElementById('formStatus');
   const submitBtn=form.querySelector('button[type="submit"]');
   form.addEventListener('submit',async e=>{
     e.preventDefault();
-    const name=form.name.value.trim();
-    const email=form.email.value.trim();
-    const message=form.message.value.trim();
+    // VAŽNO: koristi se form.elements jer form.name vraća atribut forme, a ne polje
+    const name=form.elements['name'].value.trim();
+    const email=form.elements['email'].value.trim();
+    const message=form.elements['message'].value.trim();
     const emailOk=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     if(!name||!emailOk||!message){
       status.className='form-status show err';
@@ -568,23 +572,30 @@
     submitBtn.disabled=true;
     submitBtn.textContent='Šaljem...';
     try{
-      // FormSubmit AJAX endpoint (vraća JSON umesto redirekcije)
-      const endpoint=form.action.replace('formsubmit.co/','formsubmit.co/ajax/');
-      const res=await fetch(endpoint,{
+      // FormSubmit AJAX endpoint — vraća JSON i ne redirektuje korisnika
+      const fd=new FormData(form);
+      fd.set('_replyto',email); // da "Reply" u mejlu ide direktno korisniku
+
+      const res=await fetch(FORM_ENDPOINT,{
         method:'POST',
-        body:new FormData(form),
+        body:fd,
         headers:{'Accept':'application/json'}
       });
       const data=await res.json().catch(()=>({}));
-      if(res.ok&&(data.success===true||data.success==='true')){
+      const ok = res.ok && String(data.success).toLowerCase() !== 'false';
+
+      if(ok){
         status.className='form-status show ok';
         status.textContent='Hvala! Vaš upit je uspešno poslat. Javićemo vam se uskoro.';
         form.reset();
       }else{
-        const msg=data.message
-          ||'Došlo je do greške pri slanju. Pokušajte ponovo ili nas kontaktirajte direktno.';
+        // Najčešći slučaj: forma još nije aktivirana potvrdom na email
+        const raw=(data.message||'').toString();
+        const needsActivation=/activat|confirm/i.test(raw);
         status.className='form-status show err';
-        status.textContent=msg;
+        status.textContent = needsActivation
+          ? 'Forma još nije aktivirana. Proverite email nvukic1993@gmail.com i kliknite na potvrdu, pa pokušajte ponovo.'
+          : (raw || 'Došlo je do greške pri slanju. Pokušajte ponovo ili nas kontaktirajte direktno na nvukic1993@gmail.com.');
       }
     }catch(err){
       status.className='form-status show err';
