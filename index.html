@@ -419,27 +419,30 @@
         <div class="contact-row"><div class="k">Instagram</div><div class="v"><a href="https://instagram.com/villaraijicickg" target="_blank" rel="noopener">@villaraijicickg</a></div></div>
       </div>
       <!-- FORMSUBMIT.CO (besplatno) — prvi upit aktivira formu preko potvrde koju dobijete na email nvukic1993@gmail.com -->
-      <form class="contact-form" id="contactForm" action="https://formsubmit.co/nvukic1993@gmail.com" method="POST" novalidate>
-        <input type="hidden" name="_captcha" value="false">
-        <input type="hidden" name="_subject" value="Novi upit sa sajta — Villa Rajčić">
-        <!-- _honey: skriveno polje protiv spama (ljudi ga ne vide, botovi ga popune) -->
-        <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
-        <div class="field">
-          <label for="name">Ime i prezime</label>
-          <input type="text" id="name" name="name" placeholder="Vaše ime" required>
-        </div>
-        <div class="field">
-          <label for="email">Email adresa</label>
-          <input type="email" id="email" name="email" placeholder="vas@email.com" required>
-        </div>
-        <div class="field">
-          <label for="message">Poruka</label>
-          <textarea id="message" name="message" placeholder="Recite nam nešto o vašem događaju — tip proslave, željeni termin i broj gostiju." required></textarea>
-        </div>
-        <button type="submit" class="btn">Pošaljite upit</button>
-        <div class="form-status" id="formStatus" role="status" aria-live="polite"></div>
-        <p class="form-note">Odgovaramo obično u roku od 24 sata.</p>
-      </form>
+     <!-- ČIST FORMSUBMIT KOD BEZ SKRIPTI -->
+<form class="contact-form" action="https://formsubmit.co" method="POST">
+    <input type="hidden" name="_captcha" value="false">
+    <input type="hidden" name="_template" value="table">
+    <input type="hidden" name="_next" value="https://github.io">
+    
+    <div class="field">
+        <label for="name">Ime i prezime</label>
+        <input type="text" id="name" name="name" placeholder="Vaše ime" required>
+    </div>
+    
+    <div class="field">
+        <label for="email">Email adresa</label>
+        <input type="email" id="email" name="email" placeholder="vas@email.com" required>
+    </div>
+    
+    <div class="field">
+        <label for="message">Poruka</label>
+        <textarea id="message" name="message" placeholder="Vaša poruka..." required></textarea>
+    </div>
+    
+    <button type="submit" class="btn">POŠALJITE UPIT</button>
+</form>
+
     </div>
   </div>
 </section>
