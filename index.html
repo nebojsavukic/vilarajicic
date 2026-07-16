@@ -9,15 +9,15 @@
 <meta name="description" content="Villa Rajčić — event centar u Kragujevcu za venčanja, proslave i korporativne događaje. Elegantan ambijent, kapacitet do 150 gostiju, ketering i puna organizacija. Rezervišite obilazak.">
 <meta name="keywords" content="event centar Kragujevac, venčanja Kragujevac, sala za proslave, Villa Rajčić, korporativni događaji, ketering">
 <meta name="author" content="Villa Rajčić">
-<link rel="canonical" href="https://www.villarajcic.rs/">
+<link rel="canonical" href="https://nebojsavukic.github.io/vilarajicic/">
 <link rel="icon" href="slike/logo.png" type="image/png">
 
 <!-- Open Graph -->
 <meta property="og:type" content="website">
 <meta property="og:title" content="Villa Rajčić — Event Centar">
 <meta property="og:description" content="Mesto stvoreno za svečanosti — venčanja, proslave i korporativne događaje u elegantnom ambijentu. Kapacitet do 150 gostiju.">
-<meta property="og:image" content="https://www.villarajcic.rs/slike/bazen-hero.jpg">
-<meta property="og:url" content="https://www.villarajcic.rs/">
+<meta property="og:image" content="https://nebojsavukic.github.io/vilarajicic/slike/bazen-hero.jpg">
+<meta property="og:url" content="https://nebojsavukic.github.io/vilarajicic/">
 <meta property="og:site_name" content="Villa Rajčić">
 <meta property="og:locale" content="sr_RS">
 
@@ -25,7 +25,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Villa Rajčić — Event Centar">
 <meta name="twitter:description" content="Mesto stvoreno za svečanosti — venčanja, proslave i korporativne događaje u elegantnom ambijentu.">
-<meta name="twitter:image" content="https://www.villarajcic.rs/slike/bazen-hero.jpg">
+<meta name="twitter:image" content="https://nebojsavukic.github.io/vilarajicic/slike/bazen-hero.jpg">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -74,7 +74,8 @@
 
   .hero{position:relative;min-height:100vh;display:flex;align-items:center;
     background:linear-gradient(rgba(20,17,12,.5),rgba(20,17,12,.62)),
-      url('slike/bazen-hero.jpg') center/cover fixed;
+      url('slike/bazen-hero.jpg') center/cover no-repeat;
+    background-attachment:scroll;
     color:var(--paper)}
   .hero-inner{max-width:760px}
   .hero .eyebrow{color:var(--gold-soft);margin-bottom:26px;display:block}
@@ -419,31 +420,26 @@
         <div class="contact-row"><div class="k">Instagram</div><div class="v"><a href="https://instagram.com/villaraijicickg" target="_blank" rel="noopener">@villaraijicickg</a></div></div>
       </div>
       <!-- FORMSUBMIT.CO (besplatno) — prvi upit aktivira formu preko potvrde koju dobijete na email nvukic1993@gmail.com -->
-     <!-- ČIST FORMSUBMIT KOD BEZ SKRIPTI -->
-<form class="contact-form" action="https://formsubmit.co" method="POST">
-    <input type="hidden" name="_captcha" value="false">
-    <input type="hidden" name="_template" value="table">
-    <input type="hidden" name="_next" value="https://github.io">
-
-    
-    <div class="field">
-        <label for="name">Ime i prezime</label>
-        <input type="text" id="name" name="name" placeholder="Vaše ime" required>
-    </div>
-    
-    <div class="field">
-        <label for="email">Email adresa</label>
-        <input type="email" id="email" name="email" placeholder="vas@email.com" required>
-    </div>
-    
-    <div class="field">
-        <label for="message">Poruka</label>
-        <textarea id="message" name="message" placeholder="Vaša poruka..." required></textarea>
-    </div>
-    
-    <button type="submit" class="btn">POŠALJITE UPIT</button>
-</form>
-
+      <form class="contact-form" id="contactForm" action="https://formsubmit.co/nvukic1993@gmail.com" method="POST" novalidate>
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_subject" value="Novi upit sa sajta — Villa Rajčić">
+        <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <div class="field">
+          <label for="name">Ime i prezime</label>
+          <input type="text" id="name" name="name" placeholder="Vaše ime" required>
+        </div>
+        <div class="field">
+          <label for="email">Email adresa</label>
+          <input type="email" id="email" name="email" placeholder="vas@email.com" required>
+        </div>
+        <div class="field">
+          <label for="message">Poruka</label>
+          <textarea id="message" name="message" placeholder="Recite nam nešto o vašem događaju — tip proslave, željeni termin i broj gostiju." required></textarea>
+        </div>
+        <button type="submit" class="btn">Pošaljite upit</button>
+        <div class="form-status" id="formStatus" role="status" aria-live="polite"></div>
+        <p class="form-note">Odgovaramo obično u roku od 24 sata.</p>
+      </form>
     </div>
   </div>
 </section>
@@ -554,15 +550,12 @@
     });
   });
 
-  // Kontakt forma — šalje preko FormSubmit.co (AJAX: korisnik ostaje na stranici)
-  // Ako menjate email primaoca, promenite ga i ovde i u action atributu forme.
-  const FORM_ENDPOINT='https://formsubmit.co/ajax/nvukic1993@gmail.com';
+  // Kontakt forma — šalje preko FormSubmit.co (bez otvaranja email klijenta)
   const form=document.getElementById('contactForm');
   const status=document.getElementById('formStatus');
   const submitBtn=form.querySelector('button[type="submit"]');
   form.addEventListener('submit',async e=>{
     e.preventDefault();
-    // VAŽNO: koristi se form.elements jer form.name vraća atribut forme, a ne polje
     const name=form.elements['name'].value.trim();
     const email=form.elements['email'].value.trim();
     const message=form.elements['message'].value.trim();
@@ -576,30 +569,25 @@
     submitBtn.disabled=true;
     submitBtn.textContent='Šaljem...';
     try{
-      // FormSubmit AJAX endpoint — vraća JSON i ne redirektuje korisnika
+      // FormSubmit AJAX endpoint (vraća JSON umesto redirekcije)
+      const endpoint='https://formsubmit.co/ajax/nvukic1993@gmail.com';
       const fd=new FormData(form);
-      fd.set('_replyto',email); // da "Reply" u mejlu ide direktno korisniku
-
-      const res=await fetch(FORM_ENDPOINT,{
+      fd.append('_replyto',email);
+      const res=await fetch(endpoint,{
         method:'POST',
         body:fd,
         headers:{'Accept':'application/json'}
       });
       const data=await res.json().catch(()=>({}));
-      const ok = res.ok && String(data.success).toLowerCase() !== 'false';
-
-      if(ok){
+      if(res.ok&&(data.success===true||data.success==='true')){
         status.className='form-status show ok';
         status.textContent='Hvala! Vaš upit je uspešno poslat. Javićemo vam se uskoro.';
         form.reset();
       }else{
-        // Najčešći slučaj: forma još nije aktivirana potvrdom na email
-        const raw=(data.message||'').toString();
-        const needsActivation=/activat|confirm/i.test(raw);
+        const msg=data.message
+          ||'Došlo je do greške pri slanju. Pokušajte ponovo ili nas kontaktirajte direktno.';
         status.className='form-status show err';
-        status.textContent = needsActivation
-          ? 'Forma još nije aktivirana. Proverite email nvukic1993@gmail.com i kliknite na potvrdu, pa pokušajte ponovo.'
-          : (raw || 'Došlo je do greške pri slanju. Pokušajte ponovo ili nas kontaktirajte direktno na nvukic1993@gmail.com.');
+        status.textContent=msg;
       }
     }catch(err){
       status.className='form-status show err';
